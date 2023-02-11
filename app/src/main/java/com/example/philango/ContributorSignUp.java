@@ -59,6 +59,7 @@ public class ContributorSignUp extends AppCompatActivity {
 
                                 //Show a success message and then finish the activity
                                 Toast.makeText(ContributorSignUp.this, "User Registered Successfully", Toast.LENGTH_SHORT).show();
+                                finish();
                                 Intent toMainScreen = new Intent(ContributorSignUp.this, mainScreen.class);
                                 startActivity(toMainScreen);
                                 finish();

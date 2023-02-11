@@ -67,6 +67,7 @@ public class signUp extends AppCompatActivity {
 
                                 //Show a success message and then finish the activity
                                 Toast.makeText(signUp.this, "User Registered Successfully", Toast.LENGTH_SHORT).show();
+                                finish();
                                 Intent toMainScreen = new Intent(signUp.this,mainScreen.class);
                                 startActivity(toMainScreen);
                                 finish();
@@ -75,7 +76,7 @@ public class signUp extends AppCompatActivity {
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
-
+    
                         }
 
                     });
