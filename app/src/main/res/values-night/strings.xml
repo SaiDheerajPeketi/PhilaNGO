@@ -1,3 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="email">Email</string>
+    <string name="signup">SIGN UP</string>
+    <string name="organisation_name">Organisation Name</string>
+    <string name="organisation_email">Organisation Email</string>
+    <string name="password">Password</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="login">LOGIN</string>
+    <string name="email_id">Email ID</string>
+    <string name="hello_i_am_the_main_screen_of_this_app">Hello I am The Main Screen of this App</string>
+    <string name="contributor_sign_up">Contributor Sign Up</string>
+    <string name="ngo_sign_up">NGO Sign Up</string>
 </resources>
