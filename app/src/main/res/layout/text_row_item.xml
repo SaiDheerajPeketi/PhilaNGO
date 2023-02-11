@@ -1,6 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="16dp"
+        android:background="#FFFFFF"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/headlineText"
+            android:layout_width="match_parent"
+            android:layout_height="108dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/hello_i_am_the_main_screen_of_this_app"
+            android:textColor="#3E2723"
+            android:textColorHint="#78909C"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/byText"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:text="@string/hello_i_am_the_main_screen_of_this_app"
+            android:textColor="#3E2723"
+            android:textColorHint="#757575"
+            android:textSize="20sp" />
+
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

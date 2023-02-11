@@ -16,4 +16,7 @@
     <string name="ngo_email">NGO Email</string>
     <string name="contributor_name">Contributor Name</string>
     <string name="contributor_email">Contributor Email</string>
+    <string name="textview">TextView</string>
+    <string name="headline">HeadLine</string>
+    <string name="by">by</string>
 </resources>
