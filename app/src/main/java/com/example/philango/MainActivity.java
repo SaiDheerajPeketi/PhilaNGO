@@ -12,11 +12,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class MainActivity extends AppCompatActivity {
     TextView OrganisationSignUpText,NgoSignUpText,ContributorSignUpText;
     EditText userNameInput,passwordInput;
     Button loginButton;
 
+    //Create object of DataBaseReference class to access firebase's Realtime Database
+    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://philango-a5bd5-default-rtdb.firebaseio.com/");
 
 
     @Override
@@ -60,10 +65,14 @@ public class MainActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(userNameInput.getText().toString().isEmpty() || passwordInput.getText().toString().isEmpty()){
-                    Toast.makeText(MainActivity.this, "Fill your Details", Toast.LENGTH_SHORT).show();
+
+                final String userName = userNameInput.getText().toString();
+                final String password = passwordInput.getText().toString();
+
+                if(userName.isEmpty() || password.isEmpty()){
+                    Toast.makeText(MainActivity.this, "Please Fill all Fields", Toast.LENGTH_SHORT).show();
                 }
-                if(userNameInput.getText().toString().equals("adminmail") && passwordInput.getText().toString().equals("admin")){
+                else if(userNameInput.getText().toString().equals("adminmail") && passwordInput.getText().toString().equals("admin")){
                     Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
                     Intent mainScreen = new Intent(MainActivity.this, mainScreen.class);
                     startActivity(mainScreen);
