@@ -22,4 +22,6 @@
     <string name="by">by</string>
     <string name="logout">Logout</string>
     <string name="profile">Profile</string>
+    <string name="auh">Add Username Here</string>
+    <string name="aeh">Add Email here</string>
 </resources>

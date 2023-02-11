@@ -14,4 +14,6 @@
     <string name="ngo_sign_up">NGO Sign Up</string>
     <string name="textview">TextView</string>
     <string name="headline">HeadLine</string>
+    <string name="auh">Add Username Here</string>
+    <string name="aeh">Add Email here</string>
 </resources>

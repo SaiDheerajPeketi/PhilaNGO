@@ -70,7 +70,7 @@ public class mainScreen extends AppCompatActivity {
                         startActivity(intent1);
                         return true;
                     default:
-
+                        //Else Case
                 }
                 return false;
             }
