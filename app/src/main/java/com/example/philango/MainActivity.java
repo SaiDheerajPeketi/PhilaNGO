@@ -1,5 +1,6 @@
 package com.example.philango;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -12,8 +13,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
     TextView OrganisationSignUpText,NgoSignUpText,ContributorSignUpText;
@@ -72,15 +76,44 @@ public class MainActivity extends AppCompatActivity {
                 if(userName.isEmpty() || password.isEmpty()){
                     Toast.makeText(MainActivity.this, "Please Fill all Fields", Toast.LENGTH_SHORT).show();
                 }
-                else if(userNameInput.getText().toString().equals("adminmail") && passwordInput.getText().toString().equals("admin")){
-                    Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                    Intent mainScreen = new Intent(MainActivity.this, mainScreen.class);
-                    startActivity(mainScreen);
-                }
                 else{
-                    Toast.makeText(MainActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
-                    passwordInput.setText("",TextView.BufferType.NORMAL);
+
+                    databaseReference.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            //check if email is existing in firebase database
+                            if(snapshot.hasChild(userName)){
+                                //mobile number exist in firebase database
+                                //now get the password of user from firebase data and match it with user entered password
+                                final String getPassword = snapshot.child(userName).child("password").getValue(String.class);
+
+                                if(getPassword.equals(password)){
+                                    Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                                    Intent mainScreen = new Intent(MainActivity.this, mainScreen.class);
+                                    startActivity(mainScreen);
+                                }
+                                else{
+                                    Toast.makeText(MainActivity.this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
+                                    passwordInput.setText("",TextView.BufferType.NORMAL);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
                 }
+//                else if(userNameInput.getText().toString().equals("adminmail") && passwordInput.getText().toString().equals("admin")){
+//                    Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+//                    Intent mainScreen = new Intent(MainActivity.this, mainScreen.class);
+//                    startActivity(mainScreen);
+//                }
+//                else{
+//                    Toast.makeText(MainActivity.this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
+//                    passwordInput.setText("",TextView.BufferType.NORMAL);
+//                }
             }
         });
 

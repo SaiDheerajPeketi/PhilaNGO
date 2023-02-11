@@ -27,14 +27,12 @@ public class ContributorSignUp extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_contributor_sign_up);
+        setContentView(R.layout.activity_ngo_sign_up);
 
         nameText = findViewById(R.id.nameText);
         emailText = findViewById(R.id.emailText);
         passwordText = findViewById(R.id.passwordText);
         signUp = findViewById(R.id.signUp);
-
-
 
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,19 +41,16 @@ public class ContributorSignUp extends AppCompatActivity {
                 final String email = emailText.getText().toString();
                 final String password = passwordText.getText().toString();
 
-                if(name.isEmpty() || email.isEmpty() || password.isEmpty()){
+                if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
                     Toast.makeText(ContributorSignUp.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
-                }
-
-                else{
+                } else {
                     databaseReference.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             //Check if Email is not registered before
-                            if(snapshot.hasChild(email)){
+                            if (snapshot.hasChild(email)) {
                                 Toast.makeText(ContributorSignUp.this, "Email is already registered", Toast.LENGTH_SHORT).show();
-                            }
-                            else{
+                            } else {
                                 //Sending data to Firebase Realtime Database.
                                 //Using email as unique identity of every user.
                                 //All other details come under Email id.
@@ -64,7 +59,7 @@ public class ContributorSignUp extends AppCompatActivity {
 
                                 //Show a success message and then finish the activity
                                 Toast.makeText(ContributorSignUp.this, "User Registered Successfully", Toast.LENGTH_SHORT).show();
-                                Intent toMainScreen = new Intent(ContributorSignUp.this,mainScreen.class);
+                                Intent toMainScreen = new Intent(ContributorSignUp.this, mainScreen.class);
                                 startActivity(toMainScreen);
                                 finish();
                             }
@@ -74,13 +69,10 @@ public class ContributorSignUp extends AppCompatActivity {
                         public void onCancelled(@NonNull DatabaseError error) {
 
                         }
+
                     });
-
                 }
-
-
             }
         });
-
     }
 }
