@@ -52,15 +52,18 @@ public class LoginRegisterActivity extends AppCompatActivity {
             Log.d(TAG,"onActivityResult: " + user.getEmail());
             if(Objects.requireNonNull(user.getMetadata()).getCreationTimestamp() == user.getMetadata().getLastSignInTimestamp()){
                 //New User
-                Toast.makeText(LoginRegisterActivity.this, "Welcome New User", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginRegisterActivity.this, "Please Select a Role", Toast.LENGTH_SHORT).show();
+                Intent intentn = new Intent(LoginRegisterActivity.this,AssignRole.class);
+                startActivity(intentn);
+                finish();
             }
             else{
                 //This is a returning user
                 Toast.makeText(LoginRegisterActivity.this, "Welcome back again", Toast.LENGTH_SHORT).show();
+                Intent intentl = new Intent(LoginRegisterActivity.this,MainActivity.class);
+                startActivity(intentl);
+                finish();
             }
-            Intent intentl = new Intent(LoginRegisterActivity.this,MainActivity.class);
-            startActivity(intentl);
-            finish();
         } else {
             // Sign in failed. If response is null the user canceled the
             // sign-in flow using the back button. Otherwise check

@@ -24,4 +24,10 @@
     <string name="profile">Profile</string>
     <string name="auh">Add Username Here</string>
     <string name="aeh">Add Email here</string>
+
+    <string-array name="Roles">
+        <item>Organisation</item>
+        <item>NGO</item>
+        <item>Contributor</item>
+    </string-array>
 </resources>
