@@ -2,17 +2,28 @@ package com.example.philango;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.philango.databinding.ActivityMainBinding;
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -20,104 +31,89 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
-    TextView OrganisationSignUpText,NgoSignUpText,ContributorSignUpText;
-    EditText userNameInput,passwordInput;
-    Button loginButton;
+    RecyclerView recyclerView;
+    Toolbar toolbar;
+    FloatingActionButton fab;
+    String[] arr1 = {"Item1","Item2","Item3","Item4","Item5","Item6","Item7","Item8","Item9","Item10"};
+    String[] arr2 = {"atem1","atem2","atem3","atem4","atem5","atem6","atem7","atem8","atem9","atem10"};
 
-    //Create object of DataBaseReference class to access firebase's Realtime Database
-    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://philango-a5bd5-default-rtdb.firebaseio.com/");
-
+    ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
         setContentView(R.layout.activity_main);
 
-        OrganisationSignUpText = findViewById(R.id.OrganisationSignUpText);
-        NgoSignUpText = findViewById(R.id.NgoSignUpText);
-        ContributorSignUpText = findViewById(R.id.ContributorSignUpText);
-        userNameInput = findViewById(R.id.userNameInput);
-        passwordInput = findViewById(R.id.passwordInput);
-        loginButton = findViewById(R.id.loginButton);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setSubtitle("Posts");
+        toolbar.inflateMenu(R.menu.menu_main);
 
+        //Problematic Line
+        //setSupportActionBar(toolbar);
 
-        OrganisationSignUpText.setOnClickListener(new View.OnClickListener() {
+        recyclerView =findViewById(R.id.recyclerView);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                layoutManager.getOrientation());
+        recyclerView.addItemDecoration(dividerItemDecoration);
+        CustomItem ci = new CustomItem(arr1, arr2);
+        CustomAdapter ca = new CustomAdapter(ci);
+        recyclerView.setAdapter(ca);
+
+        fab = findViewById(R.id.floatingActionButton);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent OrganisationSignUpScreen = new Intent(MainActivity.this, signUp.class);
-                startActivity(OrganisationSignUpScreen);
+                    //Data Set append the given values
             }
         });
 
-        NgoSignUpText.setOnClickListener(new View.OnClickListener() {
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent NgoSignUpScreen = new Intent(MainActivity.this, NgoSignUp.class);
-                startActivity(NgoSignUpScreen);
-            }
-        });
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.Profile:
+                        Intent intent = new Intent(MainActivity.this,UserProfile.class);
+                        startActivity(intent);
+                        return true;
+                    case R.id.Logout:
+                        AuthUI.getInstance()
+                                .signOut(MainActivity.this)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
 
-        ContributorSignUpText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent ContributorSignUpScreen = new Intent(MainActivity.this, ContributorSignUp.class);
-                startActivity(ContributorSignUpScreen);
-            }
-        });
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        Toast.makeText(MainActivity.this, "Logout Successful", Toast.LENGTH_SHORT).show();
+                                        Intent intent1 = new Intent(MainActivity.this,LoginRegisterActivity.class);
+                                        startActivity(intent1);
+                                        finish();
+                                    }
+                                });
+                        return true;
+//                        Intent intent1 = new Intent(MainActivity.this,LoginRegisterActivity.class);
+//                        startActivity(intent1);
+//                        finish();
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+//                        AuthUI.getInstance().signOut(MainActivity.this);
+//                        finish();
 
-                final String userName = userNameInput.getText().toString();
-                final String password = passwordInput.getText().toString();
-
-                if(userName.isEmpty() || password.isEmpty()){
-                    Toast.makeText(MainActivity.this, "Please Fill all Fields", Toast.LENGTH_SHORT).show();
+                    default:
+                        //Else Case
                 }
-                else{
-
-                    databaseReference.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            //check if email is existing in firebase database
-                            if(snapshot.hasChild(userName)){
-                                //mobile number exist in firebase database
-                                //now get the password of user from firebase data and match it with user entered password
-                                final String getPassword = snapshot.child(userName).child("password").getValue(String.class);
-
-                                if(getPassword.equals(password)){
-                                    Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                                    finish();
-                                    Intent mainScreen = new Intent(MainActivity.this, mainScreen.class);
-                                    startActivity(mainScreen);
-                                }
-                                else{
-                                    Toast.makeText(MainActivity.this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
-                                    passwordInput.setText("",TextView.BufferType.NORMAL);
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
-                }
-//                else if(userNameInput.getText().toString().equals("adminmail") && passwordInput.getText().toString().equals("admin")){
-//                    Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-//                    Intent mainScreen = new Intent(MainActivity.this, mainScreen.class);
-//                    startActivity(mainScreen);
-//                }
-//                else{
-//                    Toast.makeText(MainActivity.this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
-//                    passwordInput.setText("",TextView.BufferType.NORMAL);
-//                }
+                return false;
             }
         });
 
+        if(FirebaseAuth.getInstance().getCurrentUser() == null ){
+            Intent intent = new Intent(MainActivity.this,LoginRegisterActivity.class);
+            startActivity(intent);
+            finish();
+        }
 
     }
 }

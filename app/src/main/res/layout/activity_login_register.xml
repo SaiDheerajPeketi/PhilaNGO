@@ -10,7 +10,7 @@
         android:id="@+id/imageView"
         android:layout_width="268dp"
         android:layout_height="265dp"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:layout_constraintBottom_toTopOf="@+id/loginRegisterButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,10 +33,11 @@
         app:layout_constraintVertical_bias="0.5" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/loginRegisterButton"
         style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="handleLoginRegister"
         android:text="Login/Register"
         android:textColor="#0F4875"
         android:textSize="24sp"
