@@ -30,12 +30,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     Toolbar toolbar;
     FloatingActionButton fab;
-    String[] arr1 = {"Item1","Item2","Item3","Item4","Item5","Item6","Item7","Item8","Item9","Item10"};
-    String[] arr2 = {"atem1","atem2","atem3","atem4","atem5","atem6","atem7","atem8","atem9","atem10"};
+    Button createButton;
+    public static ArrayList<String> names = new ArrayList<String>();
+    public static ArrayList<String> goals = new ArrayList<String>();
+    String[] arr1 = {"Underprivileged and Physically Challenged People","Lists the No of VO's and NGO's","Flood Relief","Oldage Home","Children's EEducation","Water Distribution","Education","Education","Charity","Maintaining Cleanliness"};
+    String[] arr2 = {"Narayan Seva, 2946622222","Darpan,14414","Astha, 15558555","Sumathi Sevashram, 09369551056","Arohan Foundation, 09598051515","Indradevi NGO,128654566","Akhila Bharat,232324424","NMJS, 58373647347","Lokmanav Sahayak Sansthan,6252652","Mamatva Foundation, 09452637363"};
 
     ActivityMainBinding binding;
 
@@ -61,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                 layoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
-        CustomItem ci = new CustomItem(arr1, arr2);
+        CustomItem ci = new CustomItem(names,goals);
         CustomAdapter ca = new CustomAdapter(ci);
         recyclerView.setAdapter(ca);
 
@@ -70,8 +76,21 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                     //Data Set append the given values
+                    Intent intent = new Intent(MainActivity.this, AddEntry.class);
+//                    Bundle args = new Bundle();
+//                    args.putStringArrayList("com.example.philango.MainActivity.names",names);
+//                    args.putStringArrayList("com.example.philango.MainActivity.goals",goals);
+//                    intent.putExtra("BUNDLE", args);
+                    startActivity(intent);
+                    finish();
+//                    Intent toMain = getIntent();
+//                    Bundle newArgs = toMain.getBundleExtra("addEntryBUNDLE");
+//                    names = (ArrayList<String>) args.getStringArrayList("com.example.philango.AddEntry.names");
+//                    goals = (ArrayList<String>) args.getStringArrayList("com.example.philango.AddEntry.goals");
+
             }
         });
+
 
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -116,4 +135,5 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
 }

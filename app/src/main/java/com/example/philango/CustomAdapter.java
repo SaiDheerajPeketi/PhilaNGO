@@ -59,13 +59,13 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        viewHolder.getHeadlineText().setText(localDataSet.Headlines[position]);
-        viewHolder.getByText().setText(localDataSet.Bys[position]);
+        viewHolder.getHeadlineText().setText(localDataSet.Headlines.get(position));
+        viewHolder.getByText().setText(localDataSet.Bys.get(position));
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return localDataSet.Headlines.length;
+        return localDataSet.Headlines.size();
     }
 }

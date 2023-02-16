@@ -1,27 +1,29 @@
 package com.example.philango;
 
-public class CustomItem {
-        String[] Headlines;
-        String[] Bys;
+import java.util.ArrayList;
 
-        CustomItem(String[] arr1,String[] arr2){
+public class CustomItem {
+        ArrayList<String> Headlines;
+        ArrayList<String> Bys;
+
+        CustomItem(ArrayList<String> arr1,ArrayList<String> arr2){
                 this.Headlines = arr1;
                 this.Bys = arr2;
         }
 
-        public String[] getHeadlines() {
-                return Headlines;
-        }
-
-        public void setHeadlines(String[] headlines) {
-                Headlines = headlines;
-        }
-
-        public String[] getBys() {
+        public ArrayList<String> getBys() {
                 return Bys;
         }
 
-        public void setBys(String[] bys) {
+        public void setBys(ArrayList<String> bys) {
                 Bys = bys;
+        }
+
+        public ArrayList<String> getHeadlines() {
+                return Headlines;
+        }
+
+        public void setHeadlines(ArrayList<String> headlines) {
+                Headlines = headlines;
         }
 }

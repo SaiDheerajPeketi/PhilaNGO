@@ -20,8 +20,8 @@ public class UserProfile extends AppCompatActivity {
         emailText = findViewById(R.id.emailText);
         updateButton = findViewById(R.id.updateButton);
 
-        userNameText.setText(R.string.auh);
-        emailText.setText(R.string.aeh);
+        userNameText.setText("Test");
+        emailText.setText("test@gmail.com");
 
         updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
