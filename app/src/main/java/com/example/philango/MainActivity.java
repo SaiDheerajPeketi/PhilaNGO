@@ -29,6 +29,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,13 +38,14 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     Toolbar toolbar;
     FloatingActionButton fab;
-    Button createButton;
+
     public static ArrayList<String> names = new ArrayList<String>();
     public static ArrayList<String> goals = new ArrayList<String>();
-    String[] arr1 = {"Underprivileged and Physically Challenged People","Lists the No of VO's and NGO's","Flood Relief","Oldage Home","Children's EEducation","Water Distribution","Education","Education","Charity","Maintaining Cleanliness"};
-    String[] arr2 = {"Narayan Seva, 2946622222","Darpan,14414","Astha, 15558555","Sumathi Sevashram, 09369551056","Arohan Foundation, 09598051515","Indradevi NGO,128654566","Akhila Bharat,232324424","NMJS, 58373647347","Lokmanav Sahayak Sansthan,6252652","Mamatva Foundation, 09452637363"};
+    //String[] arr1 = {"Underprivileged and Physically Challenged People","Lists the No of VO's and NGO's","Flood Relief","Oldage Home","Children's EEducation","Water Distribution","Education","Education","Charity","Maintaining Cleanliness"};
+    //String[] arr2 = {"Narayan Seva, 2946622222","Darpan,14414","Astha, 15558555","Sumathi Sevashram, 09369551056","Arohan Foundation, 09598051515","Indradevi NGO,128654566","Akhila Bharat,232324424","NMJS, 58373647347","Lokmanav Sahayak Sansthan,6252652","Mamatva Foundation, 09452637363"};
 
     ActivityMainBinding binding;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,5 +137,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+
 
 }
