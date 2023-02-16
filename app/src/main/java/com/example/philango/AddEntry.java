@@ -28,7 +28,7 @@ public class AddEntry extends AppCompatActivity {
     Button createButton;
 
 
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseFirestore userDb = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +73,7 @@ public class AddEntry extends AppCompatActivity {
         entry.put("Goal", OrganisationGoal);
 
         //Add a new Document with a generated ID
-        db.collection("entries")
+        userDb.collection("entries")
                 .add(entry)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override

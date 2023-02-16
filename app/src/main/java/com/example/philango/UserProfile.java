@@ -7,9 +7,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 public class UserProfile extends AppCompatActivity {
     TextView userNameText,emailText;
     Button updateButton;
+    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,8 +24,8 @@ public class UserProfile extends AppCompatActivity {
         emailText = findViewById(R.id.emailText);
         updateButton = findViewById(R.id.updateButton);
 
-        userNameText.setText("Test");
-        emailText.setText("test@gmail.com");
+        userNameText.setText(currentUser.getDisplayName());
+        emailText.setText(currentUser.getEmail());
 
         updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
