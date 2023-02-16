@@ -2,6 +2,7 @@ package com.example.philango;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -31,6 +32,8 @@ public class UserProfile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Add Update Details Feature Here
+                Intent toUpdateDetails = new Intent(UserProfile.this,UpdateProfile.class);
+                startActivity(toUpdateDetails);
             }
         });
     }
