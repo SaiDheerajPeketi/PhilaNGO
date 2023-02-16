@@ -59,27 +59,36 @@ public class AssignRole extends AppCompatActivity {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String role = ((Spinner)findViewById(R.id.spinner)).getSelectedItem().toString();
+                    String role = ((Spinner)findViewById(R.id.spinner)).getSelectedItem().toString();
+//                    if(role!=" abc"){
+//                        Toast.makeText(AssignRole.this, "Hello", Toast.LENGTH_SHORT).show();
+//                    } //Didn't work
                     Intent toMain = new Intent(AssignRole.this,MainActivity.class);
                     user = FirebaseAuth.getInstance().getCurrentUser();
-                    if(user!=null) {
-                        UserDetails currUser = new UserDetails(user.getEmail(), user.getDisplayName(), role);
-                        userCreate.collection("Users").
-                                add(currUser)
-                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                Log.d("TAG", "DocumentSnapshot added with ID: " + documentReference.getId());
-                            }
-                        })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.w("TAG", "Error adding document", e);
-                                    }
-                                });
-                        startActivity(toMain);
-                        finish();
+                    if(user!=null && isValid(roles.getSelectedItemPosition())) {
+                            UserDetails currUser = new UserDetails(user.getEmail(), user.getDisplayName(), role);
+                            userCreate.collection("Users").
+                                    add(currUser)
+                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                        @Override
+                                        public void onSuccess(DocumentReference documentReference) {
+                                            Log.d("TAG", "DocumentSnapshot added with ID: " + documentReference.getId());
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w("TAG", "Error adding document", e);
+                                        }
+                                    });
+                            startActivity(toMain);
+                            finish();
+                    }
+                    else if(!isValid(roles.getSelectedItemPosition())){
+                        Toast.makeText(AssignRole.this, "Select a role to proceed", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        Toast.makeText(AssignRole.this, "User Invalid", Toast.LENGTH_SHORT).show();
                     }
                 }
 //            @Override
@@ -98,6 +107,15 @@ public class AssignRole extends AppCompatActivity {
 //        });
 
         });
+    }
+
+    private boolean isValid(int position){
+        if(position==0){
+            return false;
+        }
+        else{
+            return true;
+        }
     }
 
 }

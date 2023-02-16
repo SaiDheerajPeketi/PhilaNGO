@@ -26,6 +26,7 @@
     <string name="aeh">Add Email here</string>
 
     <string-array name="Roles">
+        <item>Select a role</item>
         <item>Organisation</item>
         <item>NGO</item>
         <item>Contributor</item>
