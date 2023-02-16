@@ -33,6 +33,7 @@
             android:layout_height="49dp"
             android:layout_weight="1"
             android:gravity="end"
+            android:paddingRight="9dp"
             android:text="@string/hello_i_am_the_main_screen_of_this_app"
             android:textColor="#3E2723"
             android:textColorHint="#757575"

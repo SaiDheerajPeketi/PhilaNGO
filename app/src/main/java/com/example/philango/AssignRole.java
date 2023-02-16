@@ -11,6 +11,9 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 public class AssignRole extends AppCompatActivity {
     Spinner roles;
     Button nextButton;
@@ -24,7 +27,7 @@ public class AssignRole extends AppCompatActivity {
         nextButton = findViewById(R.id.nextButton);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.Roles, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         roles.setAdapter(adapter);
 //        roles.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 //            @Override
@@ -47,8 +50,12 @@ public class AssignRole extends AppCompatActivity {
             public void onClick(View v) {
                 String role = ((Spinner)findViewById(R.id.spinner)).getSelectedItem().toString();
                     Intent intent = new Intent(AssignRole.this,MainActivity.class);
-                    startActivity(intent);
-                    finish();
+                    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                    if(currentUser!=null) {
+
+                        startActivity(intent);
+                        finish();
+                    }
                 }
 //            @Override
 //            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
