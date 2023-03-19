@@ -123,7 +123,7 @@ public class LoginRegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_register);
-
+        Toast.makeText(this, "Om Namah Shivaya", Toast.LENGTH_SHORT).show();
         loginRegister = findViewById(R.id.loginRegisterButton);
 
         if(FirebaseAuth.getInstance().getCurrentUser() != null){

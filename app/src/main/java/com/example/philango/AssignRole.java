@@ -28,6 +28,7 @@ public class AssignRole extends AppCompatActivity {
     Button nextButton;
     FirebaseUser user;
     FirebaseFirestore userCreate = FirebaseFirestore.getInstance();
+    public static String role;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,16 +60,22 @@ public class AssignRole extends AppCompatActivity {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    String role = ((Spinner)findViewById(R.id.spinner)).getSelectedItem().toString();
+                    role = ((Spinner)findViewById(R.id.spinner)).getSelectedItem().toString();
 //                    if(role!=" abc"){
 //                        Toast.makeText(AssignRole.this, "Hello", Toast.LENGTH_SHORT).show();
 //                    } //Didn't work
                     Intent toMain = new Intent(AssignRole.this,MainActivity.class);
                     user = FirebaseAuth.getInstance().getCurrentUser();
                     if(user!=null && isValid(roles.getSelectedItemPosition())) {
-                            UserDetails currUser = new UserDetails(user.getEmail(), user.getDisplayName(), role);
+                            //UserDetails currUser = new UserDetails(user.getEmail(), user.getDisplayName(), role);
+                            Map<String,String> userDetailsHashMap = new HashMap<>();
+                            userDetailsHashMap.put("email", user.getEmail());
+                            userDetailsHashMap.put("username",user.getDisplayName());
+                            userDetailsHashMap.put("role",role);
+                            //userDetailsHashMap.put(currUser.getEmail(),currUser);
+
                             userCreate.collection("Users").
-                                    add(currUser)
+                                    add(userDetailsHashMap)
                                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                         @Override
                                         public void onSuccess(DocumentReference documentReference) {
