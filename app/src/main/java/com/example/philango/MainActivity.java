@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -24,20 +25,28 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     Toolbar toolbar;
     FloatingActionButton fab;
+
+    FirebaseFirestore userDb = FirebaseFirestore.getInstance();
+    //FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    //String userID = user.getUid();
 
     public static ArrayList<String> names = new ArrayList<String>();
     public static ArrayList<String> goals = new ArrayList<String>();
@@ -46,6 +55,30 @@ public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding;
 
+    private void getData(){
+        userDb.collection("entries")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            goals.clear();
+                            names.clear();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d("Hello", document.getId() + " => " + document.getData());
+                                Map<String, Object> mp = document.getData();
+                                goals.add((String) mp.get("Goal"));
+                                names.add((String) mp.get("Name"));
+
+                                //Toast.makeText(MainActivity.this, document.getId() + " => " + document.getData(), Toast.LENGTH_SHORT).show();
+
+                            }
+                        } else {
+                            Log.d("Hello", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +95,8 @@ public class MainActivity extends AppCompatActivity {
 
         //Problematic Line
         //setSupportActionBar(toolbar);
+
+        getData();
 
         recyclerView =findViewById(R.id.recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -137,6 +172,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //https://www.youtube.com/watch?v=fvmbNqn-hxI
+
+    }
+
 
 
 

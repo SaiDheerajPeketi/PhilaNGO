@@ -14,6 +14,9 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -29,6 +32,8 @@ public class AddEntry extends AppCompatActivity {
 
 
     FirebaseFirestore userDb = FirebaseFirestore.getInstance();
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    String userID = user.getUid();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,23 +74,27 @@ public class AddEntry extends AppCompatActivity {
     public void createNewDBEntry(String OrganisationName,String OrganisationGoal) {
         //Create a new Entry
         Map<String, String> entry = new HashMap<>();
+        //entry.put("UserID", userID);
         entry.put("Name", OrganisationName);
         entry.put("Goal", OrganisationGoal);
+        CollectionReference entries = userDb.collection("entries");
+        entries.document(userID.toString()).set(entry);
+
 
         //Add a new Document with a generated ID
-        userDb.collection("entries")
-                .add(entry)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d("TAG", "DocumentSnapshot added with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("TAG", "Error adding document", e);
-                    }
-                });
+//        userDb.collection("entries")
+//                .add(entry)
+//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//                    @Override
+//                    public void onSuccess(DocumentReference documentReference) {
+//                        Log.d("TAG", "DocumentSnapshot added with ID: " + documentReference.getId());
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Log.w("TAG", "Error adding document", e);
+//                    }
+//                });
     }
 }
