@@ -65,4 +65,11 @@ public class UserProfile extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        userNameText.setText(currentUser.getDisplayName());
+        emailText.setText(currentUser.getEmail());
+    }
 }

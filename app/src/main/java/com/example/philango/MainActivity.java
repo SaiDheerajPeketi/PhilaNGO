@@ -1,8 +1,10 @@
 package com.example.philango;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,18 +33,23 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements RecyclerViewInterface{
     RecyclerView recyclerView;
     Toolbar toolbar;
     FloatingActionButton fab;
+    CustomAdapter ca;
 
     FirebaseFirestore userDb = FirebaseFirestore.getInstance();
     //FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -50,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static ArrayList<String> names = new ArrayList<String>();
     public static ArrayList<String> goals = new ArrayList<String>();
+    public static ArrayList<String> userNames = new ArrayList<String>();
+    public static ArrayList<Double> amount = new ArrayList<Double>();
     //String[] arr1 = {"Underprivileged and Physically Challenged People","Lists the No of VO's and NGO's","Flood Relief","Oldage Home","Children's EEducation","Water Distribution","Education","Education","Charity","Maintaining Cleanliness"};
     //String[] arr2 = {"Narayan Seva, 2946622222","Darpan,14414","Astha, 15558555","Sumathi Sevashram, 09369551056","Arohan Foundation, 09598051515","Indradevi NGO,128654566","Akhila Bharat,232324424","NMJS, 58373647347","Lokmanav Sahayak Sansthan,6252652","Mamatva Foundation, 09452637363"};
 
@@ -57,27 +66,62 @@ public class MainActivity extends AppCompatActivity {
 
     private void getData(){
         userDb.collection("entries")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            goals.clear();
-                            names.clear();
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("Hello", document.getId() + " => " + document.getData());
-                                Map<String, Object> mp = document.getData();
-                                goals.add((String) mp.get("Goal"));
-                                names.add((String) mp.get("Name"));
-
-                                //Toast.makeText(MainActivity.this, document.getId() + " => " + document.getData(), Toast.LENGTH_SHORT).show();
-
+                        .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                            @Override
+                            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                                goals.clear();
+                                names.clear();
+                                amount.clear();
+                                userNames.clear(); //Line was missing // Random Order of Users
+                                for (QueryDocumentSnapshot document : value) {
+                                    Log.d("Hello", document.getId() + " => " + document.getData());
+                                    Map<String, Object> mp = document.getData();
+                                    goals.add((String) mp.get("Goal"));
+                                    names.add((String) mp.get("Name"));
+                                    userNames.add((String) mp.get("Username"));
+                                    amount.add((Double) mp.get("Amount"));
+                                    //Toast.makeText(MainActivity.this, document.getId() + " => " + document.getData(), Toast.LENGTH_SHORT).show();
+                                }
+                                ca.notifyDataSetChanged();
                             }
-                        } else {
-                            Log.d("Hello", "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
+                        });
+//        userDb.collection("Users")
+//                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+//                        userNames.clear();
+//                        for (QueryDocumentSnapshot document : value) {
+//                            Log.d("Hello", document.getId() + " => " + document.getData());
+//                            Map<String, Object> mp = document.getData();
+//                            userNames.add((String) mp.get("username"));
+//                            //Toast.makeText(MainActivity.this, document.getId() + " => " + document.getData(), Toast.LENGTH_SHORT).show();
+//                        }
+//                        ca.notifyDataSetChanged();
+//                    }
+//                });
+
+//        userDb.collection("entries")
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            goals.clear();
+//                            names.clear();
+//                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                Log.d("Hello", document.getId() + " => " + document.getData());
+//                                Map<String, Object> mp = document.getData();
+//                                goals.add((String) mp.get("Goal"));
+//                                names.add((String) mp.get("Name"));
+//
+//                                //Toast.makeText(MainActivity.this, document.getId() + " => " + document.getData(), Toast.LENGTH_SHORT).show();
+//
+//                            }
+//                        } else {
+//                            Log.d("Hello", "Error getting documents: ", task.getException());
+//                        }
+//                    }
+//                });
     }
 
     @Override
@@ -87,7 +131,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setContentView(R.layout.activity_main);
-
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setSubtitle("Posts");
@@ -104,9 +147,11 @@ public class MainActivity extends AppCompatActivity {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                 layoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
-        CustomItem ci = new CustomItem(names,goals);
-        CustomAdapter ca = new CustomAdapter(ci);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        CustomItem ci = new CustomItem(names,goals,userNames,amount);
+        ca = new CustomAdapter(ci,this);
         recyclerView.setAdapter(ca);
+        //ca.setClickListener(this);
 
         fab = findViewById(R.id.floatingActionButton);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -137,6 +182,11 @@ public class MainActivity extends AppCompatActivity {
                         Intent intent = new Intent(MainActivity.this,UserProfile.class);
                         startActivity(intent);
                         return true;
+                    case R.id.MyPosts:
+                        getData();
+                        Intent myPosts = new Intent(MainActivity.this,UserPosts.class);
+                        startActivity(myPosts);
+                        return true;
                     case R.id.Logout:
                         AuthUI.getInstance()
                                 .signOut(MainActivity.this)
@@ -158,6 +208,7 @@ public class MainActivity extends AppCompatActivity {
 //                        AuthUI.getInstance().signOut(MainActivity.this);
 //                        finish();
 
+
                     default:
                         //Else Case
                 }
@@ -177,10 +228,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         //https://www.youtube.com/watch?v=fvmbNqn-hxI
-
+        getData();
     }
 
 
-
-
+    @Override
+    public void onClick(int position) {
+        //String userName = userNames.get(position);
+        Intent toFullPost = new Intent(MainActivity.this,FullPost.class);
+        //Log.d("MAINERROR", Integer.toString(position));
+        toFullPost.putExtra("com.example.philango.MainActivity.position", position);
+        startActivity(toFullPost);
+        //finish();
+    }
 }

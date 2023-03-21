@@ -63,8 +63,8 @@ public class UpdateProfile extends AppCompatActivity {
                 }
                 else{
                     updateData(userName);
-                    Intent toUserProfile = new Intent(UpdateProfile.this,UserProfile.class);
-                    startActivity(toUserProfile);
+                    Intent toMainActivity = new Intent(UpdateProfile.this,MainActivity.class);
+                    startActivity(toMainActivity);
                     finish();
                 }
             }
@@ -115,34 +115,37 @@ public class UpdateProfile extends AppCompatActivity {
 //        DocumentReference documentReference = userDb.collection("Users")
 //                .document()
 
-        userDb.collection("Users")
-                .whereEqualTo("username",userName)
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful() && !task.getResult().isEmpty()){
-                            DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0);
-                            String documentID = documentSnapshot.getId();
-                            userDb.collection("Users")
-                                    .document(documentID)
-                                    .update(updatedUserMap)
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void unused) {
-                                            Toast.makeText(UpdateProfile.this, "Successfully Updated", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }).addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Toast.makeText(UpdateProfile.this, "Some error occured", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                        }
-                        else{
-                            Toast.makeText(UpdateProfile.this, "Failed", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+//        userDb.collection("Users")
+//                .whereEqualTo("username",userName)
+//                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if(task.isSuccessful() && !task.getResult().isEmpty()){
+//                            DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0);
+//                            String documentID = documentSnapshot.getId();
+//                            userDb.collection("Users")
+//                                    .document(documentID)
+//                                    .update(updatedUserMap)
+//                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                        @Override
+//                                        public void onSuccess(Void unused) {
+//                                            Toast.makeText(UpdateProfile.this, "Successfully Updated", Toast.LENGTH_SHORT).show();
+//                                        }
+//                                    }).addOnFailureListener(new OnFailureListener() {
+//                                        @Override
+//                                        public void onFailure(@NonNull Exception e) {
+//                                            Toast.makeText(UpdateProfile.this, "Some error occured", Toast.LENGTH_SHORT).show();
+//                                        }
+//                                    });
+//                        }
+//                        else{
+//                            Toast.makeText(UpdateProfile.this, "Failed", Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                });
+
+
+
 //        userDb.collection("Users").document(currUser.)
 
 //        DocumentReference documentReference = userDb.collection("Users")
