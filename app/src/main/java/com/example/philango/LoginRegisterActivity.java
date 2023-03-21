@@ -5,8 +5,10 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -27,6 +29,7 @@ import java.util.Objects;
 public class LoginRegisterActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginRegisterActivity";
+    private ConstraintLayout constraintLayout;
     int AUTHUI_REQUEST_CODE = 10001; //Unique for your Application
 
     Button loginRegister;
@@ -128,6 +131,12 @@ public class LoginRegisterActivity extends AppCompatActivity {
         //Toast.makeText(this, "Om Namah Shivaya", Toast.LENGTH_SHORT).show();
         loginRegister = findViewById(R.id.loginRegisterButton);
 
+        constraintLayout = findViewById(R.id.loginLayout);
+
+        AnimationDrawable animationDrawable = (AnimationDrawable) constraintLayout.getBackground();
+        animationDrawable.setEnterFadeDuration(2500);
+        animationDrawable.setExitFadeDuration(5000);
+        animationDrawable.start();
 
         if(FirebaseAuth.getInstance().getCurrentUser() != null){
             startActivity(new Intent(this,MainActivity.class));
