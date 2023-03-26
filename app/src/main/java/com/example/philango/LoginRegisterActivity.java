@@ -133,6 +133,7 @@ public class LoginRegisterActivity extends AppCompatActivity {
 
         constraintLayout = findViewById(R.id.loginLayout);
 
+        //Animated Background
         AnimationDrawable animationDrawable = (AnimationDrawable) constraintLayout.getBackground();
         animationDrawable.setEnterFadeDuration(2500);
         animationDrawable.setExitFadeDuration(5000);
@@ -142,8 +143,6 @@ public class LoginRegisterActivity extends AppCompatActivity {
             startActivity(new Intent(this,MainActivity.class));
             LoginRegisterActivity.this.finish();
         }
-
-
 
     }
 

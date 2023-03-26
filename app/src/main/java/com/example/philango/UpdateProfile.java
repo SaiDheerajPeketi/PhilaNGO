@@ -63,6 +63,7 @@ public class UpdateProfile extends AppCompatActivity {
                 }
                 else{
                     updateData(userName);
+
                     Intent toMainActivity = new Intent(UpdateProfile.this,MainActivity.class);
                     startActivity(toMainActivity);
                     finish();

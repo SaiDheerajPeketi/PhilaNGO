@@ -4,12 +4,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -17,10 +20,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+//import com.squareup.picasso.picasso;
 
 public class UserProfile extends AppCompatActivity {
     TextView userNameText,emailText;
     Button updateButton;
+    ImageView userImage;
     FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
     FirebaseFirestore userDb = FirebaseFirestore.getInstance();
 
@@ -31,6 +36,7 @@ public class UserProfile extends AppCompatActivity {
 
         userNameText = findViewById(R.id.userNameText);
         emailText = findViewById(R.id.emailText);
+        userImage = findViewById(R.id.userImage);
         updateButton = findViewById(R.id.updateButton);
 //        userDb.collection("Users")
 //                .get()
@@ -54,6 +60,20 @@ public class UserProfile extends AppCompatActivity {
         
         userNameText.setText(currentUser.getDisplayName());
         emailText.setText(currentUser.getEmail());
+
+        Uri userProfileUri = currentUser.getPhotoUrl();
+        Glide.with(this)
+                .load(userProfileUri)
+                .error(getDrawable(R.drawable.user))
+                .into(userImage);
+//        Glide
+//                .with(getBaseContext())
+//                        .load(userProfileUri)
+//                                .into(userImage);
+//        if(userProfileUri!=null)
+            //userImage.setImageURI(null);
+            //userImage.setImageURI(currentUser.getPhotoUrl());
+
 
         updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
