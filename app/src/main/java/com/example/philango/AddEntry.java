@@ -32,13 +32,20 @@ import java.util.Map;
 import java.util.Set;
 
 public class AddEntry extends AppCompatActivity {
-    EditText OrganisationName,OrganisationGoal,Amount,Description;
+    EditText OrganisationName,OrganisationGoal,Amount,Description,PhoneNumber;
     Button createButton;
 
 
     FirebaseFirestore userDb = FirebaseFirestore.getInstance();
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     String userID = user.getUid();
+
+    boolean isValidPhoneNumber(String number){
+        if(number.length()!=10){
+            return false;
+        }
+        return true;
+    }
 
     boolean isValidAmount(String amount){
         double amt = Double.valueOf(amount);
@@ -73,13 +80,15 @@ public class AddEntry extends AppCompatActivity {
         OrganisationGoal = findViewById(R.id.organisationGoal);
         Amount = findViewById(R.id.editTextAmount);
         Description = findViewById(R.id.postDescription);
+        PhoneNumber = findViewById(R.id.phoneNumberEditText);
+
 
         createButton = findViewById(R.id.createButton);
 
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!OrganisationName.getText().toString().isEmpty() && !OrganisationGoal.getText().toString().isEmpty() && !Amount.getText().toString().isEmpty() && isValidAmount(Amount.getText().toString()) && !Description.getText().toString().isEmpty()) {
+                if(!OrganisationName.getText().toString().isEmpty() && !OrganisationGoal.getText().toString().isEmpty() && !Amount.getText().toString().isEmpty() && isValidAmount(Amount.getText().toString()) && !Description.getText().toString().isEmpty() && !PhoneNumber.getText().toString().isEmpty() && isValidPhoneNumber(PhoneNumber.getText().toString())) {
 //                    MainActivity.names.add(OrganisationName.getText().toString());
 //                    MainActivity.goals.add(OrganisationGoal.getText().toString());
 //                    String amount = Amount.getText().toString();
@@ -92,7 +101,7 @@ public class AddEntry extends AppCompatActivity {
 
 
 
-                    createNewDBEntry(OrganisationName.getText().toString(),OrganisationGoal.getText().toString(),Description.getText().toString(),Amount.getText().toString());
+                    createNewDBEntry(OrganisationName.getText().toString(),OrganisationGoal.getText().toString(),Description.getText().toString(),Amount.getText().toString(),PhoneNumber.getText().toString());
                     Intent toMain = new Intent(AddEntry.this,MainActivity.class);
 //                    Bundle args = new Bundle();
 //                    args.putStringArrayList("com.example.philango.AddEntry.names",names);
@@ -104,6 +113,9 @@ public class AddEntry extends AppCompatActivity {
                 else{
                     if(OrganisationName.getText().toString().isEmpty() || OrganisationGoal.getText().toString().isEmpty() || Amount.getText().toString().isEmpty() || Description.getText().toString().isEmpty())
                         Toast.makeText(AddEntry.this, "Fields shouldn't be empty", Toast.LENGTH_SHORT).show();
+                    if(isValidPhoneNumber(PhoneNumber.getText().toString())==false){
+                        Toast.makeText(AddEntry.this, "Enter a valid phone number without country code", Toast.LENGTH_SHORT).show();
+                    }
                     if(isValidAmount(Amount.getText().toString())==false){
                         Toast.makeText(AddEntry.this, "Amount should be only upto two decimal places", Toast.LENGTH_SHORT).show();
                     }
@@ -112,7 +124,7 @@ public class AddEntry extends AppCompatActivity {
         });
     }
 
-    public void createNewDBEntry(String OrganisationName,String OrganisationGoal,String postDescription,String Amount) {
+    public void createNewDBEntry(String OrganisationName,String OrganisationGoal,String postDescription,String Amount,String PhoneNumber) {
         double amount = Double.valueOf(Amount);
         //Create a new Entry
         Map<String, Object> entry = new HashMap<>();
@@ -143,6 +155,8 @@ public class AddEntry extends AppCompatActivity {
         entry.put("Goal", OrganisationGoal);
         entry.put("Description", postDescription);
         entry.put("Amount", amount);
+        entry.put("PhoneNumber", PhoneNumber);
+        entry.put("PaidAmount", 0.0d);
         CollectionReference entries = userDb.collection("entries");
         entries.document(userID.toString()).set(entry);
 

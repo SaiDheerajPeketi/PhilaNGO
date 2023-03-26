@@ -24,6 +24,8 @@
     <string name="profile">Profile</string>
     <string name="auh">Add Username Here</string>
     <string name="aeh">Add Email here</string>
+    <string name="enter_the_amount_to_pay">Enter the amount to pay</string>
+    <string name="pay">Pay</string>
 
     <string-array name="Roles">
         <item>Select a role</item>
