@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class AddEntry extends AppCompatActivity {
-    EditText OrganisationName,OrganisationGoal,Amount;
+    EditText OrganisationName,OrganisationGoal,Amount,Description;
     Button createButton;
 
 
@@ -72,12 +72,14 @@ public class AddEntry extends AppCompatActivity {
         OrganisationName = findViewById(R.id.organisationName);
         OrganisationGoal = findViewById(R.id.organisationGoal);
         Amount = findViewById(R.id.editTextAmount);
+        Description = findViewById(R.id.postDescription);
+
         createButton = findViewById(R.id.createButton);
 
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!OrganisationName.getText().toString().isEmpty() && !OrganisationGoal.getText().toString().isEmpty() && !Amount.getText().toString().isEmpty() && isValidAmount(Amount.getText().toString())) {
+                if(!OrganisationName.getText().toString().isEmpty() && !OrganisationGoal.getText().toString().isEmpty() && !Amount.getText().toString().isEmpty() && isValidAmount(Amount.getText().toString()) && !Description.getText().toString().isEmpty()) {
 //                    MainActivity.names.add(OrganisationName.getText().toString());
 //                    MainActivity.goals.add(OrganisationGoal.getText().toString());
 //                    String amount = Amount.getText().toString();
@@ -90,7 +92,7 @@ public class AddEntry extends AppCompatActivity {
 
 
 
-                    createNewDBEntry(OrganisationName.getText().toString(),OrganisationGoal.getText().toString(),Amount.getText().toString());
+                    createNewDBEntry(OrganisationName.getText().toString(),OrganisationGoal.getText().toString(),Description.getText().toString(),Amount.getText().toString());
                     Intent toMain = new Intent(AddEntry.this,MainActivity.class);
 //                    Bundle args = new Bundle();
 //                    args.putStringArrayList("com.example.philango.AddEntry.names",names);
@@ -100,7 +102,7 @@ public class AddEntry extends AppCompatActivity {
                     finish();
                 }
                 else{
-                    if(OrganisationName.getText().toString().isEmpty() || OrganisationGoal.getText().toString().isEmpty() || Amount.getText().toString().isEmpty())
+                    if(OrganisationName.getText().toString().isEmpty() || OrganisationGoal.getText().toString().isEmpty() || Amount.getText().toString().isEmpty() || Description.getText().toString().isEmpty())
                         Toast.makeText(AddEntry.this, "Fields shouldn't be empty", Toast.LENGTH_SHORT).show();
                     if(isValidAmount(Amount.getText().toString())==false){
                         Toast.makeText(AddEntry.this, "Amount should be only upto two decimal places", Toast.LENGTH_SHORT).show();
@@ -110,7 +112,7 @@ public class AddEntry extends AppCompatActivity {
         });
     }
 
-    public void createNewDBEntry(String OrganisationName,String OrganisationGoal,String Amount) {
+    public void createNewDBEntry(String OrganisationName,String OrganisationGoal,String postDescription,String Amount) {
         double amount = Double.valueOf(Amount);
         //Create a new Entry
         Map<String, Object> entry = new HashMap<>();
@@ -139,6 +141,7 @@ public class AddEntry extends AppCompatActivity {
         entry.put("Username",user.getDisplayName().toString());
         entry.put("Name", OrganisationName);
         entry.put("Goal", OrganisationGoal);
+        entry.put("Description", postDescription);
         entry.put("Amount", amount);
         CollectionReference entries = userDb.collection("entries");
         entries.document(userID.toString()).set(entry);
