@@ -39,8 +39,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="right"
-                android:text="Hello Amount" />
+                android:gravity="end"
+                android:text="@string/hello_amount" />
 
             <TextView
                 android:id="@+id/userName"
@@ -48,7 +48,7 @@
                 android:layout_height="51dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:hint="Username"
+                android:hint="@string/username"
                 android:text="@string/hello_i_am_the_main_screen_of_this_app"
                 android:textSize="16sp" />
         </LinearLayout>

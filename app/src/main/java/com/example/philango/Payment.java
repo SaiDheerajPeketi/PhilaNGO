@@ -117,7 +117,7 @@ public class Payment extends AppCompatActivity{
         String response[] = str.split("&");
 
         for(int i=0;i<response.length;i++){
-            String equalStr[] = response[i].split("");
+            String equalStr[] = response[i].split("=");
             if(equalStr.length >= 2){
                 if(equalStr[0].toLowerCase().equals("Status".toLowerCase())){
                     status = equalStr[1].toLowerCase();
