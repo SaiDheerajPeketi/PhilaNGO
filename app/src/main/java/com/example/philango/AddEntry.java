@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class AddEntry extends AppCompatActivity {
-    EditText OrganisationName,OrganisationGoal,Amount,Description,PhoneNumber;
+    EditText OrganisationName,OrganisationGoal,Amount,Description,PhoneNumber,UPIId;
     Button createButton;
 
 
@@ -81,6 +81,9 @@ public class AddEntry extends AppCompatActivity {
         Amount = findViewById(R.id.editTextAmount);
         Description = findViewById(R.id.postDescription);
         PhoneNumber = findViewById(R.id.phoneNumberEditText);
+        UPIId = findViewById(R.id.UPIEditText);
+
+        UPIId.setText("NA");
 
 
         createButton = findViewById(R.id.createButton);
@@ -88,7 +91,7 @@ public class AddEntry extends AppCompatActivity {
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!OrganisationName.getText().toString().isEmpty() && !OrganisationGoal.getText().toString().isEmpty() && !Amount.getText().toString().isEmpty() && isValidAmount(Amount.getText().toString()) && !Description.getText().toString().isEmpty() && !PhoneNumber.getText().toString().isEmpty() && isValidPhoneNumber(PhoneNumber.getText().toString())) {
+                if(!OrganisationName.getText().toString().isEmpty() && !OrganisationGoal.getText().toString().isEmpty() && !Amount.getText().toString().isEmpty() && isValidAmount(Amount.getText().toString()) && !Description.getText().toString().isEmpty() && !PhoneNumber.getText().toString().isEmpty() && isValidPhoneNumber(PhoneNumber.getText().toString()) && !UPIId.getText().toString().isEmpty()) {
 //                    MainActivity.names.add(OrganisationName.getText().toString());
 //                    MainActivity.goals.add(OrganisationGoal.getText().toString());
 //                    String amount = Amount.getText().toString();
@@ -101,7 +104,7 @@ public class AddEntry extends AppCompatActivity {
 
 
 
-                    createNewDBEntry(OrganisationName.getText().toString(),OrganisationGoal.getText().toString(),Description.getText().toString(),Amount.getText().toString(),PhoneNumber.getText().toString());
+                    createNewDBEntry(OrganisationName.getText().toString(),OrganisationGoal.getText().toString(),Description.getText().toString(),Amount.getText().toString(),PhoneNumber.getText().toString(),UPIId.getText().toString());
                     Intent toMain = new Intent(AddEntry.this,MainActivity.class);
 //                    Bundle args = new Bundle();
 //                    args.putStringArrayList("com.example.philango.AddEntry.names",names);
@@ -124,7 +127,7 @@ public class AddEntry extends AppCompatActivity {
         });
     }
 
-    public void createNewDBEntry(String OrganisationName,String OrganisationGoal,String postDescription,String Amount,String PhoneNumber) {
+    public void createNewDBEntry(String OrganisationName,String OrganisationGoal,String postDescription,String Amount,String PhoneNumber,String UPIId) {
         double amount = Double.valueOf(Amount);
         //Create a new Entry
         Map<String, Object> entry = new HashMap<>();
@@ -157,6 +160,7 @@ public class AddEntry extends AppCompatActivity {
         entry.put("Amount", amount);
         entry.put("PhoneNumber", PhoneNumber);
         entry.put("PaidAmount", 0.0d);
+        entry.put("UPI Id", UPIId);
         CollectionReference entries = userDb.collection("entries");
         entries.document(userID.toString()).set(entry);
 

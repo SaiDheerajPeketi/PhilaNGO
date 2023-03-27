@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewInter
     public static ArrayList<Double> paidAmount = new ArrayList<Double>();
     public static ArrayList<String> descriptions = new ArrayList<String>();
     public static ArrayList<String> phoneNumbers = new ArrayList<String>();
+    public static ArrayList<String> upiIds = new ArrayList<String>();
     //String[] arr1 = {"Underprivileged and Physically Challenged People","Lists the No of VO's and NGO's","Flood Relief","Oldage Home","Children's EEducation","Water Distribution","Education","Education","Charity","Maintaining Cleanliness"};
     //String[] arr2 = {"Narayan Seva, 2946622222","Darpan,14414","Astha, 15558555","Sumathi Sevashram, 09369551056","Arohan Foundation, 09598051515","Indradevi NGO,128654566","Akhila Bharat,232324424","NMJS, 58373647347","Lokmanav Sahayak Sansthan,6252652","Mamatva Foundation, 09452637363"};
 
@@ -80,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewInter
                                 descriptions.clear();
                                 phoneNumbers.clear();
                                 paidAmount.clear();
+                                upiIds.clear();
                                 for (QueryDocumentSnapshot document : value) {
                                     Log.d("Hello", document.getId() + " => " + document.getData());
                                     Map<String, Object> mp = document.getData();
@@ -90,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewInter
                                     amount.add((Double) mp.get("Amount"));
                                     paidAmount.add((Double) mp.get("PaidAmount"));
                                     phoneNumbers.add((String) mp.get("PhoneNumber"));
+                                    upiIds.add((String) mp.get("UPI Id"));
                                     //Toast.makeText(MainActivity.this, document.getId() + " => " + document.getData(), Toast.LENGTH_SHORT).show();
                                 }
                                 ca.notifyDataSetChanged();

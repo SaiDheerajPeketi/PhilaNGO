@@ -45,7 +45,9 @@ public class FullPost extends AppCompatActivity {
             public void onClick(View v) {
                 Intent toPayment = new Intent(FullPost.this, Payment.class);
                 toPayment.putExtra("com.example.philango.FullPost.RemainingTarget",MainActivity.paidAmount.get(position));
+                toPayment.putExtra("com.example.philango.FullPost.Position", position);
                 startActivity(toPayment);
+                finish();
             }
         });
 
