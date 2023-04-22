@@ -1,8 +1,10 @@
 package com.example.philango;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,6 +13,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -24,20 +27,105 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
-public class MainActivity extends AppCompatActivity {
+import org.checkerframework.checker.units.qual.A;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
+
+public class MainActivity extends AppCompatActivity implements RecyclerViewInterface{
     RecyclerView recyclerView;
     Toolbar toolbar;
     FloatingActionButton fab;
-    String[] arr1 = {"Item1","Item2","Item3","Item4","Item5","Item6","Item7","Item8","Item9","Item10"};
-    String[] arr2 = {"atem1","atem2","atem3","atem4","atem5","atem6","atem7","atem8","atem9","atem10"};
+    CustomAdapter ca;
+
+    FirebaseFirestore userDb = FirebaseFirestore.getInstance();
+    //FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    //String userID = user.getUid();
+
+    public static ArrayList<String> names = new ArrayList<String>();
+    public static ArrayList<String> goals = new ArrayList<String>();
+    public static ArrayList<String> userNames = new ArrayList<String>();
+    public static ArrayList<Double> amount = new ArrayList<Double>();
+    public static ArrayList<String> descriptions = new ArrayList<String>();
+    //String[] arr1 = {"Underprivileged and Physically Challenged People","Lists the No of VO's and NGO's","Flood Relief","Oldage Home","Children's EEducation","Water Distribution","Education","Education","Charity","Maintaining Cleanliness"};
+    //String[] arr2 = {"Narayan Seva, 2946622222","Darpan,14414","Astha, 15558555","Sumathi Sevashram, 09369551056","Arohan Foundation, 09598051515","Indradevi NGO,128654566","Akhila Bharat,232324424","NMJS, 58373647347","Lokmanav Sahayak Sansthan,6252652","Mamatva Foundation, 09452637363"};
 
     ActivityMainBinding binding;
+
+    private void getData(){
+        userDb.collection("entries")
+                        .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                            @Override
+                            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                                goals.clear();
+                                names.clear();
+                                amount.clear();
+                                userNames.clear(); //Line was missing // Random Order of Users
+                                descriptions.clear();
+                                for (QueryDocumentSnapshot document : value) {
+                                    Log.d("Hello", document.getId() + " => " + document.getData());
+                                    Map<String, Object> mp = document.getData();
+                                    goals.add((String) mp.get("Goal"));
+                                    names.add((String) mp.get("Name"));
+                                    userNames.add((String) mp.get("Username"));
+                                    descriptions.add((String) mp.get("Description"));
+                                    amount.add((Double) mp.get("Amount"));
+                                    //Toast.makeText(MainActivity.this, document.getId() + " => " + document.getData(), Toast.LENGTH_SHORT).show();
+                                }
+                                ca.notifyDataSetChanged();
+                            }
+                        });
+//        userDb.collection("Users")
+//                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+//                        userNames.clear();
+//                        for (QueryDocumentSnapshot document : value) {
+//                            Log.d("Hello", document.getId() + " => " + document.getData());
+//                            Map<String, Object> mp = document.getData();
+//                            userNames.add((String) mp.get("username"));
+//                            //Toast.makeText(MainActivity.this, document.getId() + " => " + document.getData(), Toast.LENGTH_SHORT).show();
+//                        }
+//                        ca.notifyDataSetChanged();
+//                    }
+//                });
+
+//        userDb.collection("entries")
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            goals.clear();
+//                            names.clear();
+//                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                Log.d("Hello", document.getId() + " => " + document.getData());
+//                                Map<String, Object> mp = document.getData();
+//                                goals.add((String) mp.get("Goal"));
+//                                names.add((String) mp.get("Name"));
+//
+//                                //Toast.makeText(MainActivity.this, document.getId() + " => " + document.getData(), Toast.LENGTH_SHORT).show();
+//
+//                            }
+//                        } else {
+//                            Log.d("Hello", "Error getting documents: ", task.getException());
+//                        }
+//                    }
+//                });
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +135,6 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setSubtitle("Posts");
         toolbar.inflateMenu(R.menu.menu_main);
@@ -55,23 +142,40 @@ public class MainActivity extends AppCompatActivity {
         //Problematic Line
         //setSupportActionBar(toolbar);
 
+        getData();
+
         recyclerView =findViewById(R.id.recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                 layoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
-        CustomItem ci = new CustomItem(arr1, arr2);
-        CustomAdapter ca = new CustomAdapter(ci);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        CustomItem ci = new CustomItem(names,goals,userNames,amount);
+        ca = new CustomAdapter(ci,this);
         recyclerView.setAdapter(ca);
+        //ca.setClickListener(this);
 
         fab = findViewById(R.id.floatingActionButton);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                     //Data Set append the given values
+                    Intent intent = new Intent(MainActivity.this, AddEntry.class);
+//                    Bundle args = new Bundle();
+//                    args.putStringArrayList("com.example.philango.MainActivity.names",names);
+//                    args.putStringArrayList("com.example.philango.MainActivity.goals",goals);
+//                    intent.putExtra("BUNDLE", args);
+                    startActivity(intent);
+                    finish();
+//                    Intent toMain = getIntent();
+//                    Bundle newArgs = toMain.getBundleExtra("addEntryBUNDLE");
+//                    names = (ArrayList<String>) args.getStringArrayList("com.example.philango.AddEntry.names");
+//                    goals = (ArrayList<String>) args.getStringArrayList("com.example.philango.AddEntry.goals");
+
             }
         });
+
 
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -80,6 +184,11 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.Profile:
                         Intent intent = new Intent(MainActivity.this,UserProfile.class);
                         startActivity(intent);
+                        return true;
+                    case R.id.MyPosts:
+                        getData();
+                        Intent myPosts = new Intent(MainActivity.this,UserPosts.class);
+                        startActivity(myPosts);
                         return true;
                     case R.id.Logout:
                         AuthUI.getInstance()
@@ -102,6 +211,7 @@ public class MainActivity extends AppCompatActivity {
 //                        AuthUI.getInstance().signOut(MainActivity.this);
 //                        finish();
 
+
                     default:
                         //Else Case
                 }
@@ -115,5 +225,23 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //https://www.youtube.com/watch?v=fvmbNqn-hxI
+        getData();
+    }
+
+
+    @Override
+    public void onClick(int position) {
+        //String userName = userNames.get(position);
+        Intent toFullPost = new Intent(MainActivity.this,FullPost.class);
+        //Log.d("MAINERROR", Integer.toString(position));
+        toFullPost.putExtra("com.example.philango.MainActivity.position", position);
+        startActivity(toFullPost);
+        //finish();
     }
 }

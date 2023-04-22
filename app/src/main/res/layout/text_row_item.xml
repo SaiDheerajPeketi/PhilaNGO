@@ -7,7 +7,7 @@
 
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:background="#FFFFFF"
         android:orientation="vertical"
@@ -19,24 +19,51 @@
         <TextView
             android:id="@+id/headlineText"
             android:layout_width="match_parent"
-            android:layout_height="108dp"
+            android:layout_height="78dp"
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/hello_i_am_the_main_screen_of_this_app"
             android:textColor="#3E2723"
             android:textColorHint="#78909C"
-            android:textSize="24sp" />
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/amount"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="Hello Amount" />
+
+            <TextView
+                android:id="@+id/userName"
+                android:layout_width="match_parent"
+                android:layout_height="51dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:hint="Username"
+                android:text="@string/hello_i_am_the_main_screen_of_this_app"
+                android:textSize="16sp" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/byText"
             android:layout_width="match_parent"
-            android:layout_height="49dp"
+            android:layout_height="86dp"
             android:layout_weight="1"
-            android:gravity="end"
+            android:gravity="center"
+            android:paddingEnd="9dp"
             android:text="@string/hello_i_am_the_main_screen_of_this_app"
             android:textColor="#3E2723"
             android:textColorHint="#757575"
-            android:textSize="20sp" />
+            android:textSize="16sp" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,8 +5,10 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -27,6 +29,7 @@ import java.util.Objects;
 public class LoginRegisterActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginRegisterActivity";
+    private ConstraintLayout constraintLayout;
     int AUTHUI_REQUEST_CODE = 10001; //Unique for your Application
 
     Button loginRegister;
@@ -52,6 +55,7 @@ public class LoginRegisterActivity extends AppCompatActivity {
             Log.d(TAG,"onActivityResult: " + user.getEmail());
             if(Objects.requireNonNull(user.getMetadata()).getCreationTimestamp() == user.getMetadata().getLastSignInTimestamp()){
                 //New User
+                //  Toast.makeText(this, "New", Toast.LENGTH_SHORT).show();
                 Toast.makeText(LoginRegisterActivity.this, "Please Select a Role", Toast.LENGTH_SHORT).show();
                 Intent intentn = new Intent(LoginRegisterActivity.this,AssignRole.class);
                 startActivity(intentn);
@@ -59,10 +63,11 @@ public class LoginRegisterActivity extends AppCompatActivity {
             }
             else{
                 //This is a returning user
+            //    Toast.makeText(this, "Last", Toast.LENGTH_SHORT).show();
                 Toast.makeText(LoginRegisterActivity.this, "Welcome back again", Toast.LENGTH_SHORT).show();
                 Intent intentl = new Intent(LoginRegisterActivity.this,MainActivity.class);
+
                 startActivity(intentl);
-                finish();
             }
         } else {
             // Sign in failed. If response is null the user canceled the
@@ -123,14 +128,21 @@ public class LoginRegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_register);
-
+        //Toast.makeText(this, "Om Namah Shivaya", Toast.LENGTH_SHORT).show();
         loginRegister = findViewById(R.id.loginRegisterButton);
+
+        constraintLayout = findViewById(R.id.loginLayout);
+
+        //Animated Background
+        AnimationDrawable animationDrawable = (AnimationDrawable) constraintLayout.getBackground();
+        animationDrawable.setEnterFadeDuration(2500);
+        animationDrawable.setExitFadeDuration(5000);
+        animationDrawable.start();
 
         if(FirebaseAuth.getInstance().getCurrentUser() != null){
             startActivity(new Intent(this,MainActivity.class));
-            this.finish();
+            LoginRegisterActivity.this.finish();
         }
-
 
     }
 
@@ -152,5 +164,11 @@ public class LoginRegisterActivity extends AppCompatActivity {
         //startActivityForResult(intent, AUTHUI_REQUEST_CODE);  //This method is deprecated
 //        getResult.launch(intent);
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        this.finish();
     }
 }
