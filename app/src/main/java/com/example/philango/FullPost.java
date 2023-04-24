@@ -11,7 +11,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class FullPost extends AppCompatActivity {
+public class
+FullPost extends AppCompatActivity {
     private TextView nameTextView,goalTextView,descriptionTextView,amountTextView;
     private Button contibuteButton;
     private ProgressBar progressBar;

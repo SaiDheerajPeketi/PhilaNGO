@@ -207,6 +207,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewInter
 
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
+                                        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                                        mAuth.signOut();
                                         Toast.makeText(MainActivity.this, "Logout Successful", Toast.LENGTH_SHORT).show();
                                         Intent intent1 = new Intent(MainActivity.this,LoginRegisterActivity.class);
                                         startActivity(intent1);
