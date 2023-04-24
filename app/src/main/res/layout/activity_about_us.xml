@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".AboutUs">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/aboutUsRecyclerView"
+    <ScrollView
+        android:id="@+id/verticalScrollAboutUs"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="1dp"
@@ -17,5 +17,57 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/linearLayoutVertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:layout_editor_absoluteX="-204dp"
+            tools:layout_editor_absoluteY="397dp" >
+
+            <LinearLayout
+                android:id="@+id/linearLayoutHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/backButton"
+                    android:layout_width="57dp"
+                    android:layout_height="61dp"
+                    android:contentDescription="TODO"
+                    app:srcCompat="@drawable/ic_baseline_arrow_back_24" />
+
+                <TextView
+                    android:id="@+id/aboutUsTextView"
+                    android:layout_width="340dp"
+                    android:layout_height="78dp"
+                    android:gravity="center"
+                    android:text="@string/about_us"
+                    android:textSize="34sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/philangoIcon"
+                android:layout_width="match_parent"
+                android:layout_height="316dp"
+                android:contentDescription="@string/logo"
+                app:srcCompat="@mipmap/ic_launcher" />
+
+            <TextView
+                android:id="@+id/informationAboutUs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10sp"
+                android:paddingTop="10sp"
+                android:paddingRight="10sp"
+                android:paddingBottom="10sp"
+                android:text="AboutUs.com is a wiki Internet domain directory. It lists websites along with information about their content. As a wiki, AboutUs allows Internet users to add entries or modify information. AboutUs.com has since become a wiki for more than just websites. The site now allows pages to be created for people, places, and almost anything else.  Ray King, Jay Westerdal, and Paul Stahura founded AboutUs in 2005. Later in 2006 a small staff of five people in Portland, Oregon, United States developed out the site. The staff expanded to more than thirty people and two continents with an office in Lahore, Pakistan. From May 2007 to early 2011, Ward Cunningham, developer of the first wiki, was the chief technology officer of AboutUs.  AboutUs attracted at least 1.4 million U.S. visitors in July 2008.[1] They used to use the domain name &quot;AboutUs.org&quot;, but moved to new site under &quot;AboutUs.com&quot; in May 2010.[2] Traffic and revenue started declining sharply and in 2013 AboutUs.com and its assets were sold to Omkarasana LLC, a Colorado Limited Liability Company located in Denver. The new company has since redesigned the website, migrated its infrastructure over to Amazon Web Services, and increased visitors and revenue. There are now approximately four individuals that actively operate the site."
+                android:textSize="28sp" />
+        </LinearLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

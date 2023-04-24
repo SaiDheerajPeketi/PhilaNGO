@@ -38,4 +38,5 @@
     <string name="hello_amount">Hello Amount</string>
     <string name="username">Username</string>
     <string name="about_us">About Us</string>
+    <string name="logo">Logo</string>
 </resources>

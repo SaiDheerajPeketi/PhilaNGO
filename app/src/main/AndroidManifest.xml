@@ -15,7 +15,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".AboutUs"
-            android:exported="false">
+            android:exported="false"
+            android:parentActivityName=".LoginRegisterActivity">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
