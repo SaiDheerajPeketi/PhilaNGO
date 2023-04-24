@@ -45,6 +45,7 @@
     <string name="update_profile">Update Profile</string>
     <string name="hello_amount">Hello Amount</string>
     <string name="username">Username</string>
+    <string name="about_us">About Us</string>
 
     <string-array name="Roles">
         <item>Select a role</item>

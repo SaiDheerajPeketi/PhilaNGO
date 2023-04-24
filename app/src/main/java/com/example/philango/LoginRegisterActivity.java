@@ -30,7 +30,7 @@ public class LoginRegisterActivity extends AppCompatActivity {
     private ConstraintLayout constraintLayout;
     int AUTHUI_REQUEST_CODE = 10001; //Unique for your Application
 
-    Button loginRegister;
+    Button loginRegister,aboutUs;
 
     private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
             new FirebaseAuthUIActivityResultContract(),
@@ -128,6 +128,7 @@ public class LoginRegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login_register);
         //Toast.makeText(this, "Om Namah Shivaya", Toast.LENGTH_SHORT).show();
         loginRegister = findViewById(R.id.loginRegisterButton);
+        aboutUs = findViewById(R.id.aboutUsButton);
 
         constraintLayout = findViewById(R.id.loginLayout);
 
@@ -141,6 +142,15 @@ public class LoginRegisterActivity extends AppCompatActivity {
             startActivity(new Intent(this,MainActivity.class));
             LoginRegisterActivity.this.finish();
         }
+
+        aboutUs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent toAboutUs = new Intent(LoginRegisterActivity.this,AboutUs.class);
+                startActivity(toAboutUs);
+                finish();
+            }
+        });
 
     }
 
